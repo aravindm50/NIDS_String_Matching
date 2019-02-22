@@ -1,0 +1,450 @@
+Line #    Mem usage    Increment   Line Contents
+================================================
+    40     90.4 MiB     90.4 MiB   @profile
+    41                             def build_automaton(shingles, automaton):
+    42     90.4 MiB      0.0 MiB        if automaton == Algorithm.aho_corasick :
+    43     90.4 MiB      0.0 MiB                a = ACAuto()
+    44     90.5 MiB      0.0 MiB                for shingle in shingles:
+    45     90.5 MiB      0.1 MiB                        a.add_word(shingle)
+    46     90.5 MiB      0.0 MiB                a.create_failure_links()
+    47     90.5 MiB      0.0 MiB        if automaton == Algorithm.commentz_walter :
+    48                                          a = CWAuto()
+    49                                          for shingle in shingles:
+    50                                                  a.add_word(shingle)
+    51                                          a.create_failure_links()
+    52     90.5 MiB      0.0 MiB        if automaton == Algorithm.pfac :
+    53                                          a = PFACAuto()
+    54                                          for shingle in shingles:
+    55                                                  a.add_word(shingle)
+    56                                          a.links()
+    57
+    58     90.5 MiB      0.0 MiB        return a
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.7 MiB     90.7 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.7 MiB      0.0 MiB                matches = defaultdict();
+   132     90.7 MiB      0.0 MiB                pos = 0
+   133     90.7 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.7 MiB   -284.9 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.7 MiB   -284.9 MiB                        if self.node_has_child(current_node, character):
+   138     90.7 MiB    -49.7 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.7 MiB   -280.2 MiB                                while not self.is_root(current_node):
+   141     90.7 MiB   -253.6 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.7 MiB   -253.6 MiB                                        if self.node_has_child(current_node, character):
+   143     90.7 MiB   -208.7 MiB                                                current_node = current_node.children[character]
+   144     90.7 MiB   -208.7 MiB                                                break
+   145
+   146     90.7 MiB   -284.9 MiB                        if (current_node.word is not None):
+   147     90.7 MiB     -1.1 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.7 MiB     -0.1 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.7 MiB     -1.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.7 MiB   -284.9 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.7 MiB   -284.9 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.7 MiB   -284.9 MiB                        pos += 1
+   160
+   161     90.6 MiB     -0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.7 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.7 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.7 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.7 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.7 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.7 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.7 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.7 MiB      0.0 MiB                                                break
+   145
+   146     90.7 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.7 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.7 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.7 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.7 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.7 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.7 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.7 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.7 MiB     90.7 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.7 MiB      0.0 MiB                matches = defaultdict();
+   132     90.7 MiB      0.0 MiB                pos = 0
+   133     90.7 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.7 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.7 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.7 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.7 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.7 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.7 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.7 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.7 MiB      0.0 MiB                                                break
+   145
+   146     90.7 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.7 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.7 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.7 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.7 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.7 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.7 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.7 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.7 MiB     90.7 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.7 MiB      0.0 MiB                matches = defaultdict();
+   132     90.7 MiB      0.0 MiB                pos = 0
+   133     90.7 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.7 MiB  -2836.1 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.7 MiB  -2836.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.7 MiB   -495.6 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.7 MiB  -2788.6 MiB                                while not self.is_root(current_node):
+   141     90.7 MiB  -2526.2 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.7 MiB  -2526.2 MiB                                        if self.node_has_child(current_node, character):
+   143     90.7 MiB  -2078.1 MiB                                                current_node = current_node.children[character]
+   144     90.7 MiB  -2078.1 MiB                                                break
+   145
+   146     90.7 MiB  -2836.0 MiB                        if (current_node.word is not None):
+   147     90.7 MiB    -11.4 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.7 MiB     -2.2 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.7 MiB     -9.2 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.7 MiB  -2836.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.7 MiB  -2836.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.7 MiB  -2836.1 MiB                        pos += 1
+   160
+   161     90.6 MiB     -0.1 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
+
+
+Filename: E:\NUS Semester 2\EE5902 - Multi Processor\commentzwalter-master\structures.py
+
+Line #    Mem usage    Increment   Line Contents
+================================================
+   129     90.6 MiB     90.6 MiB        @profile
+   130                                  def report_all_matches(self, text):
+   131     90.6 MiB      0.0 MiB                matches = defaultdict();
+   132     90.6 MiB      0.0 MiB                pos = 0
+   133     90.6 MiB      0.0 MiB                current_node = self.root
+   134
+   135     90.6 MiB      0.0 MiB                for character in text:
+   136                                                  # If current node has character as a child, go to the next node
+   137     90.6 MiB      0.0 MiB                        if self.node_has_child(current_node, character):
+   138     90.6 MiB      0.0 MiB                                current_node = current_node.children[character]
+   139                                                  else:
+   140     90.6 MiB      0.0 MiB                                while not self.is_root(current_node):
+   141     90.6 MiB      0.0 MiB                                        current_node = current_node.ACsuffix_link
+   142     90.6 MiB      0.0 MiB                                        if self.node_has_child(current_node, character):
+   143     90.6 MiB      0.0 MiB                                                current_node = current_node.children[character]
+   144     90.6 MiB      0.0 MiB                                                break
+   145
+   146     90.6 MiB      0.0 MiB                        if (current_node.word is not None):
+   147     90.6 MiB      0.0 MiB                                if str(current_node.word) not in matches.keys():
+   148     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)] = [pos - len(current_node.word) + 1]
+   149                                                          else:
+   150     90.6 MiB      0.0 MiB                                        matches[str(current_node.word)].append(pos - len(current_node.word) + 1)
+   151     90.6 MiB      0.0 MiB                        output_searcher = current_node.ACoutput_link
+   152     90.6 MiB      0.0 MiB                        while (output_searcher is not None):
+   153                                                          if str(output_searcher.word) not in matches.keys():
+   154                                                                  matches[str(output_searcher.word)] = [pos - len(output_searcher.word) + 1]
+   155                                                          else:
+   156                                                                  matches[str(output_searcher.word)].append(pos - len(output_searcher.word) + 1)
+   157                                                          output_searcher = output_searcher.ACoutput_link
+   158
+   159     90.6 MiB      0.0 MiB                        pos += 1
+   160
+   161     90.6 MiB      0.0 MiB                return matches
